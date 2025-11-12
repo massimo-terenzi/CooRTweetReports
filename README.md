@@ -1,5 +1,7 @@
 # CooRTweetReports
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17594844.svg)](https://doi.org/10.5281/zenodo.17594844)
+
 **CooRTweetReports** is a browser-based tool to analyze coordinated social media activity using OpenAI's GPT models.  
 It works in combination with two R packages:
 
@@ -174,6 +176,22 @@ Open an issue [here](https://github.com/massimo-terenzi/CooRTweetReports/issues)
 
 ---
 
-## 📄 License
+## 📄 Citation
 
-MIT License - see [LICENSE](LICENSE) file for details
+If you use this package in your research, please cite:
+
+```bibtex
+@software{terenzi_2025_coortweetreports,
+  author       = {Terenzi, Massimo},
+  title        = {CooRTweetReports},
+  year         = 2025,
+  version      = {v0.2.0},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.17594844},
+  url          = {https://doi.org/10.5281/zenodo.17594844}
+}
+```
+
+Or in text format:
+
+> Terenzi, M. (2025). CooRTweetReports (v0.2.0). Zenodo. https://doi.org/10.5281/zenodo.17594844
