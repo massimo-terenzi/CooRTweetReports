@@ -15,7 +15,7 @@
       Works with outputs from
       <a href="https://github.com/nicolarighetti/CooRTweet" target="_blank" class="text-blue-600 underline">CooRTweet</a>
       and
-      <a href="https://github.com/massimo-terenzi/coortweetpost" target="_blank" class="text-blue-600 underline">CooRTweetPost</a>.
+      <a href="https://github.com/massimo-terenzi/CooRTweetPost" target="_blank" class="text-blue-600 underline">CooRTweetPost</a>.
     </p>
 
     <!-- Inputs -->
@@ -50,6 +50,10 @@
       <label class="inline-flex items-center gap-2 text-sm">
         <input type="checkbox" id="includeSummary" checked>
         Include Executive Summary in Word
+      </label>
+      <label class="inline-flex items-center gap-2 text-sm">
+        <input type="checkbox" id="includeContentLinks">
+        Include content links (MCL URLs) in examples
       </label>
     </div>
 
@@ -122,7 +126,8 @@
                 row && row.community !== undefined && row.community !== null
               ).map(row => ({
                 community: String(row.community),
-                object_id: String(row.object_id)
+                object_id: String(row.object_id),
+                content_id: row.content_id ? String(row.content_id) : null
               }));
               analyzeTopCommunities(apiKey);
             }
@@ -163,10 +168,10 @@
           if (stopFlag) { updateProgress(++done, total); break; }
 
           const cid = String(community.community);
-          const ids = objects.filter(o => o.community === cid).map(o => o.object_id).filter(Boolean);
+          const objectsForCommunity = objects.filter(o => o.community === cid);
 
           // sampling
-          let used = ids.slice();
+          let used = objectsForCommunity.slice();
           if (used.length > maxSample) {
             used = shuffle(used).slice(0, maxSample);
           }
@@ -176,7 +181,7 @@
           div.className = "bg-white p-4 rounded shadow border";
           div.innerHTML = `
             <h2 class="text-lg font-semibold mb-2">Community ${cid}</h2>
-            <p class="mb-2 text-sm text-gray-600">Sample size: ${used.length} of ${ids.length}</p>
+            <p class="mb-2 text-sm text-gray-600">Sample size: ${used.length} of ${objectsForCommunity.length}</p>
             <div class="mt-2 text-sm font-mono text-gray-500" id="result-${cid}">Analyzing <span class="animate-pulse">...</span></div>
           `;
           output.appendChild(div);
@@ -184,7 +189,8 @@
           // call API
           let analysis = "🔒 API key not provided.";
           if (apiKey) {
-            const prompt = generatePrompt(used);
+            const includeLinks = document.getElementById('includeContentLinks').checked;
+            const prompt = generatePrompt(used, includeLinks);
             analysis = await callOpenAI(apiKey, prompt) || "❌ No response or error.";
           }
 
@@ -221,12 +227,21 @@
     }
 
     // ---------------- Prompts & API ----------------
-    function generatePrompt(texts) {
+    function generatePrompt(objectsArray, includeLinks = false) {
+      const textList = objectsArray.map(obj => {
+        if (includeLinks && obj.content_id) {
+          return `- ${obj.object_id}\n  [Source: ${obj.content_id}]`;
+        }
+        return `- ${obj.object_id}`;
+      }).join("\n");
+
       return `### ChatGPT analysis ###\n\n` +
         `You are an AI assistant helping users analyze clusters of short text messages or social media posts that were likely distributed in a coordinated way. The goal is to identify patterns in language, tone, or rhetorical framing that may reveal shared objectives, ideological leanings, or manipulative strategies.\n\n` +
-        `Here is a list of shared texts (IDs or short texts):\n` +
-        texts.map(t => `- ${t}`).join("\n") +
-        `\n\nGroup the texts by themes or narratives. Describe rhetorical strategies. Include examples (original with English translation if needed). Conclude with a summary.\n\n### ChatGPT analysis ###`;
+        `Here is a list of shared texts` + (includeLinks ? ` with their source links (MCL URLs from Facebook)` : ``) + `:\n\n` +
+        textList +
+        `\n\nGroup the texts by themes or narratives. Describe rhetorical strategies. Include examples (original with English translation if needed).` +
+        (includeLinks ? ` When referencing examples, you can include the source link to allow direct verification.` : ``) +
+        ` Conclude with a summary.\n\n### ChatGPT analysis ###`;
     }
 
     async function callOpenAI(apiKey, prompt) {
