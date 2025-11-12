@@ -13,10 +13,10 @@ It works in combination with two R packages:
 
 ## ✨ What's New
 
-- **Content ID Links**: Optionally include source links (MCL URLs) in the examples analyzed by GPT
-  - Enable via checkbox: "Include content links (MCL URLs) in examples"
-  - When enabled, GPT receives both the text and its source URL for verification
-  - Useful for tracing coordinated content back to original posts
+- **Content ID Tracking**: Optionally include content identifiers in the examples analyzed by GPT
+  - Enable via checkbox: "Include content IDs in examples"
+  - When enabled, GPT receives both the text and its content reference for verification
+  - Useful for tracing coordinated content back to original posts (URLs, post IDs, or other identifiers)
 
 ---
 
@@ -31,7 +31,7 @@ This tool takes in:
 
 1. Filter the most relevant communities by number of unique objects and vertices.  
 2. Sample and preview the shared texts (`object_id`) per community.  
-3. **Optionally include source links** (`content_id`) for each text example.
+3. **Optionally include content identifiers** (`content_id`) for each text example.
 4. Generate a structured narrative analysis using OpenAI's GPT (via your API key).  
 5. Export a complete **Word (.doc)** report with an optional **Executive Summary**.  
 6. View results interactively in the browser, with progress indicators and stop controls.
@@ -42,8 +42,7 @@ This tool takes in:
 
 1. Run your coordination detection pipeline with `CooRTweet`.  
 2. Post-process the results with [`CooRTweetPost`](https://github.com/massimo-terenzi/CooRTweetPost) (v0.3.0+) in R:
-
-   ```r
+```r
    library(CooRTweetPost)
    
    # Detect coordinated groups
@@ -63,13 +62,13 @@ This tool takes in:
    
    # Export all results
    export_all_results(coordinated_groups, g, output_dir = "output")
-   ```
+```
 
 3. Upload the generated CSV files to [CooRTweetReports](https://massimo-terenzi.github.io/CooRTweetReports/)
 4. Configure your analysis parameters:
    - Select % of top communities
    - Set max sample size per community
-   - **Enable/disable content links** (new!)
+   - **Enable/disable content IDs** (new!)
    - Add your OpenAI API key
 5. Generate and export your narrative report
 
@@ -81,7 +80,7 @@ This tool takes in:
 - **Privacy-focused** — all processing happens client-side (except GPT API calls)
 - **Interactive filtering** — preview and select communities before analysis
 - **Structured reports** — GPT-generated narratives organized by community
-- **Content link tracking** — optionally include source URLs for verification ✨ NEW
+- **Content ID tracking** — optionally include content references for verification ✨ NEW
 - **Export to Word** — download professional .doc reports with optional executive summary
 - **Progress tracking** — real-time progress indicators with stop controls
 
@@ -98,40 +97,46 @@ Required columns:
 - `unique_objects` — Number of shared objects
 
 Optional (for enhanced analysis):
-- `content_ids` — Comma-separated list of content URLs
+- `content_ids` — Comma-separated list of content identifiers
 
 ### coordinated_objects_by_community.csv
 Required columns:
 - `community` — Community ID
 - `object_id` — The shared text/object
 
-Optional (for content link tracking):
-- `content_id` — Source URL (e.g., MCL URL from Facebook) ✨ NEW in v0.3.0+
+Optional (for content ID tracking):
+- `content_id` — Content identifier (e.g., post URL, post ID, or other reference) ✨ NEW in v0.3.0+
 
 ---
 
-## 💡 Content Links Feature
+## 💡 Content ID Feature
 
-When you enable "Include content links (MCL URLs) in examples":
+When you enable "Include content IDs in examples":
 
-**Without content links:**
+**Without content IDs:**
 ```
 - This is a coordinated post about topic X
 - Another post sharing similar narrative
 ```
 
-**With content links:**
+**With content IDs:**
 ```
 - This is a coordinated post about topic X
-  [Source: https://www.facebook.com/...]
+  [Source: https://example.com/post/123]
 - Another post sharing similar narrative
-  [Source: https://www.facebook.com/...]
+  [Source: post_id_456]
 ```
 
 GPT can then:
 - Reference specific sources in its analysis
 - Enable direct verification of coordinated content
 - Provide more accurate attribution in the report
+
+**Content IDs can be:**
+- URLs (Facebook MCL links, Twitter/X URLs, etc.)
+- Platform-specific post IDs
+- Custom identifiers from your dataset
+- Any reference that helps trace back to the original content
 
 ---
 
@@ -151,7 +156,7 @@ The tool uses `gpt-4o-mini` by default for cost efficiency. Typical cost: ~$0.01
 The Word export includes:
 - **Executive Summary** (optional) — High-level overview of all communities
 - **Community-by-community analysis** — Detailed GPT-generated narratives
-- **Source attribution** — Content links when enabled
+- **Source attribution** — Content IDs when enabled
 - **Professional formatting** — Ready for reports and presentations
 
 ---
