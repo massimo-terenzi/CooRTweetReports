@@ -249,10 +249,10 @@
 
       return `### ChatGPT analysis ###\n\n` +
         `You are an AI assistant helping users analyze clusters of short text messages or social media posts that were likely distributed in a coordinated way. The goal is to identify patterns in language, tone, or rhetorical framing that may reveal shared objectives, ideological leanings, or manipulative strategies.\n\n` +
-        `Here is a list of shared texts` + (includeLinks ? ` with their source links (MCL URLs from Facebook)` : ``) + `:\n\n` +
+        `Here is a list of shared texts` + (includeLinks ? ` with their content identifiers (URLs, post IDs, or other references)` : ``) + `:\n\n` +
         textList +
         `\n\nGroup the texts by themes or narratives. Describe rhetorical strategies. Include examples (original with English translation if needed).` +
-        (includeLinks ? ` When referencing examples, you can include the source link to allow direct verification.` : ``) +
+        (includeLinks ? ` When referencing examples, you can include the content identifier to allow direct verification.` : ``) +
         ` Conclude with a summary.\n\n### ChatGPT analysis ###`;
     }
 
