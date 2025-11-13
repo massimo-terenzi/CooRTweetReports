@@ -1,6 +1,6 @@
 # CooRTweetReports
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17594844.svg)](https://doi.org/10.5281/zenodo.17594844)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17597788.svg)](https://doi.org/10.5281/zenodo.17597788)
 
 **CooRTweetReports** is a browser-based tool to analyze coordinated social media activity using OpenAI's GPT models.  
 It works in combination with two R packages:
@@ -187,11 +187,11 @@ If you use this package in your research, please cite:
   year         = 2025,
   version      = {v0.2.0},
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.17594844},
-  url          = {https://doi.org/10.5281/zenodo.17594844}
+  doi          = {10.5281/zenodo.17597788},
+  url          = {https://doi.org/10.5281/zenodo.17597788}
 }
 ```
 
 Or in text format:
 
-> Terenzi, M. (2025). CooRTweetReports (v0.2.0). Zenodo. https://doi.org/10.5281/zenodo.17594844
+> Terenzi, M. (2025). CooRTweetReports (v0.2.0). Zenodo. https://doi.org/10.5281/zenodo.17597788
